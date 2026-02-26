@@ -35,7 +35,7 @@ pipeline {
                 ])
                 httpRequest(
                     httpMode       : 'POST',
-                    url            : 'http://3.87.229.188:6000/analyze',
+                    url            : 'http://3.87.229.188:5001/analyze',
                     contentType    : 'APPLICATION_JSON',
                     requestBody    : payload
                 )
