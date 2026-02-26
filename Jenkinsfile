@@ -31,7 +31,7 @@ pipeline {
                 // Fetch console log via Jenkins API with auth
                 def buildUrl = env.BUILD_URL
                 def consoleLog = sh(
-                    script: "curl -s -u admin:df9a744784b84816b56b24e16e929512 ${buildUrl}consoleText || echo 'Could not fetch console log'",
+                    script: "curl -s ${buildUrl}consoleText || echo 'Could not fetch console log'",
                     returnStdout: true
                 ).trim()
 
