@@ -2,30 +2,25 @@ pipeline {
     agent any
 
     stages {
-        stage('Setup') {
-            steps {
-                echo 'Installing build tools...'
-                sh 'apt-get update -qq && apt-get install -y -qq g++ > /dev/null 2>&1'
-            }
-        }
-
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
 
-        stage('Build') {
+        stage('Syntax Check') {
             steps {
-                echo 'Compiling C++ project...'
-                sh 'g++ -std=c++17 -Wall -Wextra -o user_records main.cpp User.cpp UserStore.cpp 2>&1 | tee build_output.log'
+                echo 'Checking Python syntax...'
+                sh 'python3 -m py_compile user.py'
+                sh 'python3 -m py_compile user_store.py'
+                sh 'python3 -m py_compile main.py'
             }
         }
 
-        stage('Test') {
+        stage('Run') {
             steps {
-                echo 'Running executable as a smoke test...'
-                sh './user_records'
+                echo 'Running application...'
+                sh 'python3 main.py'
             }
         }
     }
