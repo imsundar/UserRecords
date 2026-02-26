@@ -24,7 +24,7 @@ pipeline {
     }
 
     post {
-        always {
+        failure {
             script {
                 def buildLog = currentBuild.rawBuild.getLog(500).join('\n')
                 def payload = groovy.json.JsonOutput.toJson([
