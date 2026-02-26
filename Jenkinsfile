@@ -2,6 +2,13 @@ pipeline {
     agent any
 
     stages {
+        stage('Setup') {
+            steps {
+                echo 'Installing build tools...'
+                sh 'apt-get update -qq && apt-get install -y -qq g++ > /dev/null 2>&1'
+            }
+        }
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -11,7 +18,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Compiling C++ project...'
-                sh 'g++ -std=c++17 -Wall -Wextra -o user_records main.cpp User.cpp UserStore.cpp'
+                sh 'g++ -std=c++17 -Wall -Wextra -o user_records main.cpp User.cpp UserStore.cpp 2>&1 | tee build_output.log'
             }
         }
 
@@ -26,12 +33,19 @@ pipeline {
     post {
         failure {
             script {
-                def buildLog = currentBuild.rawBuild.getLog(500).join('\n')
+                // Fetch console log via Jenkins API (sandbox-safe)
+                def buildUrl = env.BUILD_URL
+                def consoleLog = sh(
+                    script: "curl -s ${buildUrl}consoleText || echo 'Could not fetch console log'",
+                    returnStdout: true
+                ).trim()
+
                 def payload = groovy.json.JsonOutput.toJson([
-                    job   : env.JOB_NAME,
-                    build : env.BUILD_NUMBER,
-                    status: currentBuild.currentResult,
-                    log   : buildLog
+                    console_log : consoleLog,
+                    repo_url    : 'https://github.com/imsundar/UserRecords',
+                    branch      : 'main',
+                    build_id    : env.BUILD_NUMBER,
+                    job_name    : env.JOB_NAME
                 ])
                 httpRequest(
                     httpMode       : 'POST',
