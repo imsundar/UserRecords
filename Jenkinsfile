@@ -36,7 +36,7 @@ pipeline {
                 ])
                 httpRequest(
                     httpMode       : 'POST',
-                    url            : 'http://your-webserver.com/build-hook',
+                    url            : 'http://3.87.229.188:6000/analyze',
                     contentType    : 'APPLICATION_JSON',
                     requestBody    : payload
                 )
