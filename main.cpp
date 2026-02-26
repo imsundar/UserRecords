@@ -9,7 +9,7 @@ int main() {
     // Add some users
     store.addUser(User("Alice Johnson", 30, "123 Maple St, Springfield"));
     store.addUser(User("Bob Smith", 25, "456 Oak Ave, Shelbyville"));
-    store.addUser(User("Charlie Lee", 35, "789 Pine Rd, Capital City"));
+    store.addUser(User("Charlie Lee", 35, "789 Pine Rd, Capital City"))
 
     std::cout << "All users:" << std::endl;
     store.printAll();
