@@ -10,16 +10,15 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Running build...'
-                // add your build commands here, e.g.:
-                // sh 'npm install && npm run build'
+                echo 'Compiling C++ project...'
+                sh 'g++ -std=c++17 -Wall -Wextra -o user_records main.cpp User.cpp UserStore.cpp'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Running tests...'
-                // sh 'npm test'
+                echo 'Running executable as a smoke test...'
+                sh './user_records'
             }
         }
     }
@@ -27,7 +26,7 @@ pipeline {
     post {
         always {
             script {
-                def buildLog = currentBuild.rawBuild.getLog(100).join('\n')
+                def buildLog = currentBuild.rawBuild.getLog(500).join('\n')
                 def payload = groovy.json.JsonOutput.toJson([
                     job   : env.JOB_NAME,
                     build : env.BUILD_NUMBER,
