@@ -1,5 +1,6 @@
 from user import User
 from user_store import UserStore
+from user_validator import validate_user
 
 
 def main():

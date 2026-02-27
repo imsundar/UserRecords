@@ -18,7 +18,7 @@ class UserStore:
         self.users = [u for u in self.users if u.get_name() != name]
 
     def print_all(self):
-        for u in self.users
+        for u in self.users:
             u.print_info()
 
     def count(self) -> int:
